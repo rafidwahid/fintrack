@@ -1,0 +1,119 @@
+[
+  { "name": "Bangladesh Bank", "type": "Central Bank" },
+  { "name": "Sonali Bank", "type": "State-Owned Commercial Bank" },
+  { "name": "Janata Bank", "type": "State-Owned Commercial Bank" },
+  { "name": "Agrani Bank", "type": "State-Owned Commercial Bank" },
+  { "name": "Rupali Bank", "type": "State-Owned Commercial Bank" },
+  { "name": "BASIC Bank", "type": "State-Owned Commercial Bank" },
+  {
+    "name": "Bangladesh Development Bank",
+    "type": "State-Owned Commercial Bank"
+  },
+  { "name": "Bangladesh Krishi Bank", "type": "Specialized Bank" },
+  { "name": "Rajshahi Krishi Unnayan Bank", "type": "Specialized Bank" },
+  { "name": "Probashi Kallyan Bank", "type": "Specialized Bank" },
+  { "name": "AB Bank", "type": "Private Commercial Bank (Conventional)" },
+  {
+    "name": "Bangladesh Commerce Bank",
+    "type": "Private Commercial Bank (Conventional)"
+  },
+  { "name": "Bank Asia", "type": "Private Commercial Bank (Conventional)" },
+  { "name": "BRAC Bank", "type": "Private Commercial Bank (Conventional)" },
+  {
+    "name": "City Bank",
+    "type": "Private Commercial Bank (Conventional)"
+  },
+  {
+    "name": "Community Bank Bangladesh",
+    "type": "Private Commercial Bank (Conventional)"
+  },
+  { "name": "Dhaka Bank", "type": "Private Commercial Bank (Conventional)" },
+  {
+    "name": "Dutch-Bangla Bank",
+    "type": "Private Commercial Bank (Conventional)"
+  },
+  { "name": "Eastern Bank", "type": "Private Commercial Bank (Conventional)" },
+  { "name": "IFIC Bank", "type": "Private Commercial Bank (Conventional)" },
+  { "name": "Jamuna Bank", "type": "Private Commercial Bank (Conventional)" },
+  { "name": "Meghna Bank", "type": "Private Commercial Bank (Conventional)" },
+  {
+    "name": "Mercantile Bank",
+    "type": "Private Commercial Bank (Conventional)"
+  },
+  { "name": "Midland Bank", "type": "Private Commercial Bank (Conventional)" },
+  {
+    "name": "Modhumoti Bank",
+    "type": "Private Commercial Bank (Conventional)"
+  },
+  {
+    "name": "Mutual Trust Bank",
+    "type": "Private Commercial Bank (Conventional)"
+  },
+  { "name": "National Bank", "type": "Private Commercial Bank (Conventional)" },
+  { "name": "NCC Bank", "type": "Private Commercial Bank (Conventional)" },
+  { "name": "NRB Bank", "type": "Private Commercial Bank (Conventional)" },
+  {
+    "name": "NRB Commercial Bank",
+    "type": "Private Commercial Bank (Conventional)"
+  },
+  { "name": "One Bank", "type": "Private Commercial Bank (Conventional)" },
+  { "name": "Padma Bank", "type": "Private Commercial Bank (Conventional)" },
+  { "name": "Premier Bank", "type": "Private Commercial Bank (Conventional)" },
+  { "name": "Prime Bank", "type": "Private Commercial Bank (Conventional)" },
+  { "name": "Pubali Bank", "type": "Private Commercial Bank (Conventional)" },
+  { "name": "Shimanto Bank", "type": "Private Commercial Bank (Conventional)" },
+  {
+    "name": "Southeast Bank",
+    "type": "Private Commercial Bank (Conventional)"
+  },
+  {
+    "name": "South Bangla Agriculture and Commerce Bank",
+    "type": "Private Commercial Bank (Conventional)"
+  },
+  { "name": "Standard Bank", "type": "Private Commercial Bank (Conventional)" },
+  { "name": "Trust Bank", "type": "Private Commercial Bank (Conventional)" },
+  {
+    "name": "United Commercial Bank",
+    "type": "Private Commercial Bank (Conventional)"
+  },
+  { "name": "Uttara Bank", "type": "Private Commercial Bank (Conventional)" },
+  {
+    "name": "Al-Arafah Islami Bank",
+    "type": "Private Commercial Bank (Islami)"
+  },
+  { "name": "EXIM Bank", "type": "Private Commercial Bank (Islami)" },
+  {
+    "name": "First Security Islami Bank",
+    "type": "Private Commercial Bank (Islami)"
+  },
+  { "name": "Global Islami Bank", "type": "Private Commercial Bank (Islami)" },
+  {
+    "name": "Islami Bank Bangladesh",
+    "type": "Private Commercial Bank (Islami)"
+  },
+  {
+    "name": "Shahjalal Islami Bank",
+    "type": "Private Commercial Bank (Islami)"
+  },
+  { "name": "Social Islami Bank", "type": "Private Commercial Bank (Islami)" },
+  { "name": "Union Bank", "type": "Private Commercial Bank (Islami)" },
+  { "name": "ICB Islamic Bank", "type": "Private Commercial Bank (Islami)" },
+  {
+    "name": "Standard Chartered Saadiq",
+    "type": "Private Commercial Bank (Islami)"
+  },
+  { "name": "Citibank N.A.", "type": "Foreign Commercial Bank" },
+  { "name": "Commercial Bank of Ceylon", "type": "Foreign Commercial Bank" },
+  { "name": "Habib Bank", "type": "Foreign Commercial Bank" },
+  { "name": "HSBC Bank", "type": "Foreign Commercial Bank" },
+  { "name": "National Bank of Pakistan", "type": "Foreign Commercial Bank" },
+  { "name": "Standard Chartered Bank", "type": "Foreign Commercial Bank" },
+  { "name": "State Bank of India", "type": "Foreign Commercial Bank" },
+  { "name": "Woori Bank", "type": "Foreign Commercial Bank" },
+  { "name": "Bank Alfalah", "type": "Foreign Commercial Bank" },
+  { "name": "Ansar-VDP Unnayan Bank", "type": "Non-Scheduled Bank" },
+  { "name": "Grameen Bank", "type": "Non-Scheduled Bank" },
+  { "name": "Jubilee Bank", "type": "Non-Scheduled Bank" },
+  { "name": "Karmashangsthan Bank", "type": "Non-Scheduled Bank" },
+  { "name": "Palli Sanchay Bank", "type": "Non-Scheduled Bank" }
+]

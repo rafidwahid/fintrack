@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int          @id @default(autoincrement())
+  email        String       @unique
+  firstName    String?
+  lastName     String?
+  googleId     String?      @unique
+      
+  refreshTokens RefreshToken[]    
+  cards        Card[]       
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model Bank {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  logoUrl     String?   // URL to the bank's logo image
+  cards       Card[]   // All cards issued by this bank
+  cardDesigns CardDesign[] // Design templates for this bank's cards
+}
+
+model CardDesign {
+  id          Int      @id @default(autoincrement())
+  bankId      Int      // Foreign key to Bank
+  bank        Bank     @relation(fields: [bankId], references: [id])
+  variant     String   // e.g., "Platinum", "Gold", "Silver", "Standard"
+  designUrl   String   // URL to the background SVG/PNG image 
+  colorScheme String?  // JSON string with color information
+  isDefault   Boolean  @default(false) // Whether this is the bank's default design
+  cards       Card[]   // Cards using this design
+}
+
+model Card {
+  id                   Int          @id @default(autoincrement())
+  lastFour             String       // Last 4 digits, used as PDF password
+  passcode             String?       // Additional security code if needed
+  cardIssuer           String       // e.g., Visa, Mastercard
+  bankId               Int          // Foreign key to Bank
+  bank                 Bank         @relation(fields: [bankId], references: [id])
+  cardDesignId         Int?         // Optional reference to a specific design
+  cardDesign           CardDesign?  @relation(fields: [cardDesignId], references: [id])
+  variant              String?      // e.g., "Platinum", "Gold", "Silver", "Standard"
+  statementDay         Int?         // Day of the month when statement is generated (1-31)
+  notificationDate     DateTime?    // Date for reminders (optional)
+  userId               Int          // Foreign key to User
+  user                 User         @relation(fields: [userId], references: [id])
+  transactions         Transaction[] // Transactions parsed from statements
+  statements           Statement[]   // Uploaded statements for this card
+}
+
+model Transaction {
+  id             Int       @id @default(autoincrement())
+  cardId         Int       // Foreign key to Card
+  card           Card      @relation(fields: [cardId], references: [id])
+  statementId    Int?      // Optional foreign key to Statement (if parsed from one)
+  statement      Statement? @relation(fields: [statementId], references: [id])
+  amount         Float     // Transaction amount
+  currency       String    @default("USD") // Currency code
+  description    String?   // Merchant or transaction details
+  category       String?   // e.g., "Food", "Travel"
+  transactionDate DateTime  // Date of the transaction
+  status         String    @default("completed") // e.g., "pending", "completed"
+  createdAt      DateTime  @default(now()) // Record creation timestamp
+}
+
+model Statement {
+  id             Int      @id @default(autoincrement())
+  cardId         Int      // Foreign key to Card
+  card           Card     @relation(fields: [cardId], references: [id])
+  fileUrl        String   // URL or path to the uploaded PDF
+  uploadDate     DateTime @default(now()) // When the statement was uploaded
+  statementDate  DateTime // Date of the statement (extracted from PDF)
+  transactions   Transaction[] // Transactions parsed from this statement
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid()) // Use UUID for security
+  userId    Int
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
