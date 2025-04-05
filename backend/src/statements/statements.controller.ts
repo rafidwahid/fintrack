@@ -57,13 +57,13 @@ export class StatementsController {
   }
 
   @Get()
-  findAll() {
-    return this.statementService.findAll();
+  findAll(@Req() req) {
+    return this.statementService.findAll(req.user.id);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.statementService.findOne(+id);
+  findOne(@Param('id') id: string, @Req() req) {
+    return this.statementService.findOne(+id, req.user.id);
   }
 
   @Patch(':id')

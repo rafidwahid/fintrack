@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -68,16 +69,16 @@ export default function RootLayout({
               <div className="flex-none hidden lg:block">
                 <ul className="menu menu-horizontal">
                   <li>
-                    <a>Dashboard</a>
+                    <Link href="/dashboard">Dashboard</Link>
                   </li>
                   <li>
-                    <a>Statements</a>
+                    <Link href="/statements">Statements</Link>
                   </li>
                   <li>
-                    <a>Analytics</a>
+                    <Link href="/analytics">Analytics</Link>
                   </li>
                   <li>
-                    <a>Settings</a>
+                    <Link href="/settings">Settings</Link>
                   </li>
                 </ul>
               </div>
@@ -95,16 +96,16 @@ export default function RootLayout({
                 <span>Menu</span>
               </li>
               <li>
-                <a>Dashboard</a>
+                <Link href="/dashboard">Dashboard</Link>
               </li>
               <li>
-                <a>Statements</a>
+                <Link href="/statements">Statements</Link>
               </li>
               <li>
-                <a>Analytics</a>
+                <Link href="/analytics">Analytics</Link>
               </li>
               <li>
-                <a>Settings</a>
+                <Link href="/settings">Settings</Link>
               </li>
             </ul>
           </div>

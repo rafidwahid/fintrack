@@ -26,10 +26,7 @@ async function seed() {
         name: bankName,
       },
     });
-    console.log(`Processed: ${bankName}`);
   }
-
-  console.log('Seeding completed successfully!');
 }
 
 seed()

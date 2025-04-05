@@ -79,6 +79,7 @@ model Statement {
   fileUrl        String   // URL or path to the uploaded PDF
   uploadDate     DateTime @default(now()) // When the statement was uploaded
   statementDate  DateTime // Date of the statement (extracted from PDF)
+  totalOutstanding Float?  // Total outstanding amount from the statement
   transactions   Transaction[] // Transactions parsed from this statement
 }
 

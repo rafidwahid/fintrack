@@ -64,7 +64,7 @@ export default function DashboardPage() {
           }
         } else {
           // If not authenticated, you might want to redirect to login
-          console.log("Not authenticated");
+
           setUserName("Guest");
           // window.location.href = '/login';
           setIsLoading(false);

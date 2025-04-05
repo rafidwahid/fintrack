@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserDetails } from './utils/types';
 
-
 @Injectable()
 export class AuthService {
   constructor(private readonly prisma: PrismaService) {}
@@ -13,7 +12,7 @@ export class AuthService {
     });
 
     if (user) return user;
-    console.log('User not found. Creating...');
+
     return this.prisma.user.create({
       data: {
         email: details.email,

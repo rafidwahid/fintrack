@@ -84,6 +84,7 @@ export default function CardDetailsPage() {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [duplicateStatement, setDuplicateStatement] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -140,6 +141,7 @@ export default function CardDetailsPage() {
     setUploading(true);
     setUploadError(null);
     setUploadSuccess(false);
+    setDuplicateStatement(false);
 
     try {
       const formData = new FormData();
@@ -155,8 +157,16 @@ export default function CardDetailsPage() {
         }
       );
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Failed to upload file");
+        if (data.error === "DUPLICATE_STATEMENT") {
+          setDuplicateStatement(true);
+          setUploadError(data.message);
+        } else {
+          throw new Error(data.message || "Failed to upload file");
+        }
+        return;
       }
 
       setUploadSuccess(true);
@@ -383,6 +393,15 @@ export default function CardDetailsPage() {
               <p className="mt-2 text-green-500 text-sm">
                 File uploaded successfully!
               </p>
+            )}
+
+            {duplicateStatement && (
+              <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                <p className="text-yellow-700 text-sm">
+                  This statement has already been uploaded. Please check your
+                  statements list.
+                </p>
+              </div>
             )}
           </div>
         </div>

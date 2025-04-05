@@ -5,7 +5,7 @@ export class EblExtractor implements BankExtractor {
     return {
       metadata: {
         totalOutstanding: this.extractTotalOutstanding(text),
-        closingBalance: this.extractClosingBalance(text),
+        statementDate: this.extractStatementDate(text),
       },
       transactions: this.extractTransactions(text),
     };
@@ -16,9 +16,18 @@ export class EblExtractor implements BankExtractor {
     return match ? parseFloat(match[1].replace(/,/g, '')) : undefined;
   }
 
-  private extractClosingBalance(text: string): number | undefined {
-    const match = text.match(/Closing\s+Balance\s*:?\s*([0-9,]+\.[0-9]{2})/i);
-    return match ? parseFloat(match[1].replace(/,/g, '')) : undefined;
+  private extractStatementDate(
+    text: string,
+  ): { date: number; month: string; year: number } | undefined {
+    const match = text.match(/(\d{2})-([A-Za-z]{3})-(\d{4})/);
+    if (match) {
+      return {
+        date: parseInt(match[1], 10),
+        month: match[2],
+        year: parseInt(match[3], 10),
+      };
+    }
+    return undefined;
   }
 
   // private extractTransactions(text: string) {
@@ -42,13 +51,13 @@ export class EblExtractor implements BankExtractor {
   private extractTransactions(text: string) {
     const transactions = [];
 
-    // Step 1: Find the "Transactional Details" heading and ensure we're inside that section
-    const transactionSectionPattern = /Transactional\s+Details.*?Card\s+#/s;
-    const transactionSectionMatch = transactionSectionPattern.exec(text);
+    // Step 1: Find the "Card #" text and ensure we're starting from there
+    const cardNumberPattern = /Card\s+#/;
+    const cardNumberMatch = cardNumberPattern.exec(text);
 
-    if (transactionSectionMatch) {
+    if (cardNumberMatch) {
       // Step 2: Get the part of the text starting after "Card #"
-      const sectionAfterCard = text.slice(transactionSectionMatch.index);
+      const sectionAfterCard = text.slice(cardNumberMatch.index);
 
       // Step 3: Define the transaction pattern
       const transactionPattern =

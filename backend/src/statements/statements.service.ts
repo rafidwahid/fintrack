@@ -62,29 +62,74 @@ export class StatementsService {
     }
 
     // Save & Extract Data
-    const statementData = await this.extractTextFromPDF(
-      file.buffer,
-      card.lastFour,
+    const pdfText = await this.extractTextFromPDF(file.buffer, card.lastFour);
+
+    const bankExtractor = BankExtractorFactory.getExtractor(pdfText);
+    const extractedData = bankExtractor.extractData(pdfText);
+
+    // Format statement date
+    const statementDate = extractedData.metadata.statementDate;
+    if (!statementDate) {
+      throw new Error('Statement date not found in the document');
+    }
+
+    // Convert statement date to DateTime
+    const formattedStatementDate = new Date(
+      `${statementDate.year}-${statementDate.month}-${statementDate.date}`,
     );
 
-    const bankExtractor = BankExtractorFactory.getExtractor(statementData);
-    const extractedData = bankExtractor.extractData(statementData);
-    console.log('extraction started');
+    // Check for duplicate statement
+    const existingStatement = await this.prisma.statement.findFirst({
+      where: {
+        cardId,
+        statementDate: formattedStatementDate,
+      },
+    });
 
-    console.log(extractedData.transactions);
+    if (existingStatement) {
+      return {
+        success: false,
+        message: 'Statement for this date already exists',
+        error: 'DUPLICATE_STATEMENT',
+      };
+    }
 
-    // Save statement in DB
-    // const statement = await this.prisma.statement.create({
-    //   data: {
-    //     cardId,
-    //     userId,
-    //     statementDate: statementData.statementDate,
-    //     totalOutstanding: statementData.totalOutstanding,
-    //     transactions: { createMany: { data: statementData.transactions } },
-    //   },
-    // });
+    // Format transactions for database
+    const formattedTransactions = extractedData.transactions.map(
+      (transaction) => ({
+        cardId,
+        amount: transaction.settlementAmount,
+        currency: transaction.settlementCurrency,
+        description: transaction.description,
+        transactionDate: new Date(transaction.date),
+        status: 'completed',
+      }),
+    );
 
-    // return { success: true, statementId: statement.id, transactions: statementData.transactions };
+    // Save statement and transactions in DB
+    const statement = await this.prisma.statement.create({
+      data: {
+        cardId,
+        statementDate: formattedStatementDate,
+        totalOutstanding: extractedData.metadata.totalOutstanding,
+        fileUrl: file.originalname,
+      },
+    });
+
+    //create transactions with statementId
+    const transactions = await this.prisma.transaction.createMany({
+      data: formattedTransactions.map((transaction) => ({
+        ...transaction,
+        statementId: statement.id,
+      })),
+    });
+
+    return {
+      success: true,
+      message: 'Statement uploaded successfully',
+      statementId: statement.id,
+      transactions: transactions.count,
+    };
   }
 
   private async extractTextFromPDF(
@@ -115,12 +160,72 @@ export class StatementsService {
     return 'This action adds a new statement';
   }
 
-  findAll() {
-    return `This action returns all statements`;
+  async findAll(userId: number) {
+    const statements = await this.prisma.statement.findMany({
+      where: {
+        card: {
+          userId: userId,
+        },
+      },
+      include: {
+        card: {
+          select: {
+            lastFour: true,
+            bank: {
+              select: {
+                name: true,
+                logoUrl: true,
+              },
+            },
+          },
+        },
+        transactions: {
+          orderBy: {
+            transactionDate: 'desc',
+          },
+        },
+      },
+      orderBy: {
+        statementDate: 'desc',
+      },
+    });
+
+    return statements;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} statement`;
+  async findOne(id: number, userId: number) {
+    const statement = await this.prisma.statement.findFirst({
+      where: {
+        id,
+        card: {
+          userId: userId,
+        },
+      },
+      include: {
+        card: {
+          select: {
+            lastFour: true,
+            bank: {
+              select: {
+                name: true,
+                logoUrl: true,
+              },
+            },
+          },
+        },
+        transactions: {
+          orderBy: {
+            transactionDate: 'desc',
+          },
+        },
+      },
+    });
+
+    if (!statement) {
+      throw new NotFoundException(`Statement with ID ${id} not found`);
+    }
+
+    return statement;
   }
 
   update(id: number, updateStatementDto: UpdateStatementDto) {
