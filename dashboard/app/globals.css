@@ -1,2 +1,8 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: dracula --default;
+  include: ;
+  exclude: ;
+  prefix: ;
+  logs: true;
+}
