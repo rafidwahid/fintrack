@@ -31,6 +31,17 @@ interface CardDesign {
   designUrl: string;
 }
 
+const CARD_ISSUERS = [
+  { id: "visa", name: "Visa", icon: "💳" },
+  { id: "mastercard", name: "Mastercard", icon: "💳" },
+  { id: "amex", name: "American Express", icon: "💳" },
+  { id: "diners", name: "Diners Club", icon: "💳" },
+  { id: "discover", name: "Discover", icon: "💳" },
+  { id: "unionpay", name: "UnionPay", icon: "💳" },
+  { id: "jcb", name: "JCB", icon: "💳" },
+  { id: "other", name: "Other", icon: "💳" },
+];
+
 export default function AddCardModal({
   isOpen,
   onClose,
@@ -156,7 +167,7 @@ export default function AddCardModal({
               name="bankId"
               value={formData.bankId}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 select"
               required
             >
               <option value="">Select a bank</option>
@@ -173,17 +184,23 @@ export default function AddCardModal({
               htmlFor="cardIssuer"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Card Issuer
+              Card Network
             </label>
-            <input
-              type="text"
+            <select
               id="cardIssuer"
               name="cardIssuer"
               value={formData.cardIssuer}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 select"
               required
-            />
+            >
+              <option value="">Select card network</option>
+              {CARD_ISSUERS.map((issuer) => (
+                <option key={issuer.id} value={issuer.id}>
+                  {issuer.icon} {issuer.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="mb-4">
@@ -191,22 +208,35 @@ export default function AddCardModal({
               htmlFor="lastFour"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Last 4 digits
+              Last 3-4 digits
             </label>
             <input
-              type="text"
+              type="number"
               id="lastFour"
               name="lastFour"
               value={formData.lastFour}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              maxLength={4}
-              pattern="\d{4}"
+              onChange={(e) => {
+                // Only allow up to 4 digits
+                const value = e.target.value;
+                if (value.length <= 4) {
+                  handleChange(e);
+                }
+              }}
+              onKeyPress={(e) => {
+                // Allow only numbers
+                if (!/[0-9]/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 input [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              min="0"
+              max="9999"
+              placeholder="Last 4 digits"
               required
             />
           </div>
 
-          {formData.bankId > 0 && (
+          {/* {formData.bankId > 0 && (
             <div className="mb-4">
               <label
                 htmlFor="cardDesignId"
@@ -219,7 +249,7 @@ export default function AddCardModal({
                 name="cardDesignId"
                 value={formData.cardDesignId}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 input"
               >
                 <option value="">Select a variant</option>
                 {designs.map((design) => (
@@ -229,7 +259,7 @@ export default function AddCardModal({
                 ))}
               </select>
             </div>
-          )}
+          )} */}
 
           <div className="mb-4">
             <label
@@ -243,10 +273,23 @@ export default function AddCardModal({
               id="statementDay"
               name="statementDay"
               value={formData.statementDay || ""}
-              onChange={handleChange}
+              onChange={(e) => {
+                const value = parseInt(e.target.value);
+                // Only allow numbers between 1 and 31
+                if (!value || (value >= 1 && value <= 31)) {
+                  handleChange(e);
+                }
+              }}
+              onKeyPress={(e) => {
+                // Prevent typing non-numeric characters
+                if (!/[0-9]/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
               min="1"
               max="31"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 input [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              placeholder="Enter day (1-31)"
             />
           </div>
 
