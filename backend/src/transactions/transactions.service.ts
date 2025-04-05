@@ -78,10 +78,28 @@ export class TransactionsService {
 
   async updateTransactionCategory(id: string, category: string) {
     try {
-      return await this.prisma.transaction.update({
+      // First get the transaction to find its description
+      const transaction = await this.prisma.transaction.findUnique({
         where: { id: parseInt(id) },
+      });
+
+      if (!transaction) {
+        throw new NotFoundException(`Transaction with ID ${id} not found`);
+      }
+
+      // Update all transactions with the same description
+      const updatedTransactions = await this.prisma.transaction.updateMany({
+        where: {
+          description: transaction.description,
+        },
         data: { category },
       });
+
+      // Return the original transaction with updated category
+      return {
+        ...transaction,
+        category,
+      };
     } catch (error) {
       throw new NotFoundException(`Transaction with ID ${id} not found`);
     }
