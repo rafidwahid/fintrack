@@ -1,73 +1,141 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Fintrack - Credit Card Management System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Fintrack is a comprehensive credit card management system that helps users track and manage their credit card statements, transactions, and bank information.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Getting Started
 
-## Description
+### Prerequisites
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Docker and Docker Compose
+- Node.js (v16 or higher)
+- Yarn package manager
 
-## Installation
+### Installation
+
+1. Clone the repository:
 
 ```bash
-$ yarn install
+git clone <repository-url>
+cd fintrack/backend
 ```
 
-## Running the app
+2. Install dependencies:
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+yarn install
 ```
 
-## Test
+3. Set up environment variables:
+   Create a `.env` file in the backend directory with the following variables:
+
+```
+DATABASE_URL="postgresql://card_user:card_user_password@localhost:5445/credit_statements"
+REDIS_PASSWORD=your_redis_password
+REDIS_PORT=6379
+```
+
+### Running the Application
+
+#### Using Docker (Recommended)
+
+1. Start all services:
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+make up
 ```
 
-## Support
+2. Build services (if needed):
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+make build
+```
 
-## Stay in touch
+3. View logs:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+make logs
+```
 
-## License
+4. Stop services:
 
-Nest is [MIT licensed](LICENSE).
+```bash
+make down
+```
+
+#### Development Mode
+
+Run the application in development mode:
+
+```bash
+make dev
+```
+
+### Database Management
+
+The application uses PostgreSQL as the primary database and Redis for session management.
+
+#### Database Seeding
+
+To seed the database with initial bank data:
+
+```bash
+npx prisma db seed
+```
+
+## 📁 Project Structure
+
+```
+backend/
+├── src/              # Source code
+├── prisma/          # Database schema and migrations
+├── data/            # Data files (e.g., banks.json)
+├── test/            # Test files
+├── uploads/         # File uploads directory
+├── docker-compose.yml
+├── Makefile
+└── package.json
+```
+
+## 🛠️ Available Commands
+
+- `make up` - Start all services in background
+- `make down` - Stop and remove all services
+- `make build` - Build or rebuild services
+- `make logs` - View logs for all services
+- `make redis-cli` - Connect to Redis CLI
+- `make restart` - Restart all services
+- `make clean` - Remove all containers, networks, and volumes
+- `make dev` - Run in development mode
+
+## 🔧 Technology Stack
+
+- **Backend Framework**: NestJS
+- **Database**: PostgreSQL
+- **Cache**: Redis
+- **ORM**: Prisma
+- **Containerization**: Docker
+- **Package Manager**: Yarn
+
+## 📝 API Documentation
+
+API documentation is available at `/api/docs` when running the application.
+
+## 🧪 Testing
+
+To run tests:
+
+```bash
+yarn test
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
